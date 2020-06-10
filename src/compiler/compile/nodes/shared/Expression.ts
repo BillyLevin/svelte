@@ -122,7 +122,7 @@ export default class Expression {
 							? [get_object(node.left).name]
 							: extract_names(node.left);
 					} else if (node.type === 'UpdateExpression') {
-                        deep = node.argument.type === 'MemberExpression';
+						deep = node.argument.type === 'MemberExpression';
 						const { name } = get_object(node.argument);
 						names = [name];
 					}
@@ -138,13 +138,13 @@ export default class Expression {
 						} else {
 							component.add_reference(name);
 
-                            const variable = component.var_lookup.get(name);
+							const variable = component.var_lookup.get(name);
 
 							if (variable) {
 								variable[deep ? 'mutated' : 'reassigned'] = true;
 
 								if (!deep && variable.writable === false) {
-									component.warn(node as any, {
+									component.error(node as any, {
 										code: 'assignment-to-const',
 										message: 'You are assigning to a const'
 									});
